@@ -3,7 +3,8 @@
  * All API URLs should be imported from this file for consistency and easy maintenance
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://university-feedback-portal.vercel.app';
+// Use empty string for development (relative URLs) or set NEXT_PUBLIC_API_BASE_URL in .env
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
 export const API_ENDPOINTS = {
   // Department related endpoints
