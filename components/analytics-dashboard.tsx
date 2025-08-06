@@ -177,7 +177,7 @@ export default function AnalyticsDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className={`text-xl font-bold ${card.color || ""}`}>{card.value}</div>
-                  {card.badge && <Badge variant={card.badgeVariant as any} className="text-xs">{card.badge}</Badge>}
+                  {card.badge && <Badge variant={card.badgeVariant as "default" | "secondary" | "destructive" | "outline"} className="text-xs">{card.badge}</Badge>}
                   {card.subtitle && <div className="text-xs text-gray-500 truncate">{card.subtitle}</div>}
                 </CardContent>
               </Card>
