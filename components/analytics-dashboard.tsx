@@ -300,13 +300,13 @@ export default function AnalyticsDashboard() {
               <CardHeader><CardTitle>Key Insights</CardTitle><CardDescription>Analysis of feedback trends</CardDescription></CardHeader>
               <CardContent className="space-y-4">
                 {[
-                  { color: "green", title: "Top Performing Area", text: analytics.highestRatedCriteria ? `${analytics.highestRatedCriteria.fullCriteria.substring(0, 50)}${analytics.highestRatedCriteria.fullCriteria.length > 50 ? '...' : ''} scores highest at ${analytics.highestRatedCriteria.rating.toFixed(1)}/10` : 'No data available' },
-                  { color: "red", title: "Area for Improvement", text: analytics.lowestRatedCriteria ? `${analytics.lowestRatedCriteria.fullCriteria.substring(0, 50)}${analytics.lowestRatedCriteria.fullCriteria.length > 50 ? '...' : ''} needs attention at ${analytics.lowestRatedCriteria.rating.toFixed(1)}/10` : 'No data available' },
-                  { color: "blue", title: "Response Engagement", text: `${analytics.responseRate.toFixed(1)}% completion rate with ${analytics.feedbackComments.length} detailed comments` },
-                  { color: "purple", title: "Overall Trend", text: analytics.averageRating >= 7 ? 'Department is performing well with high satisfaction rates' : analytics.averageRating >= 4 ? 'Department shows average performance with room for improvement' : 'Department requires immediate attention and improvement strategies' }
+                  { colorClass: "bg-green-500", title: "Top Performing Area", text: analytics.highestRatedCriteria ? `${analytics.highestRatedCriteria.fullCriteria.substring(0, 50)}${analytics.highestRatedCriteria.fullCriteria.length > 50 ? '...' : ''} scores highest at ${analytics.highestRatedCriteria.rating.toFixed(1)}/10` : 'No data available' },
+                  { colorClass: "bg-red-500", title: "Area for Improvement", text: analytics.lowestRatedCriteria ? `${analytics.lowestRatedCriteria.fullCriteria.substring(0, 50)}${analytics.lowestRatedCriteria.fullCriteria.length > 50 ? '...' : ''} needs attention at ${analytics.lowestRatedCriteria.rating.toFixed(1)}/10` : 'No data available' },
+                  { colorClass: "bg-blue-500", title: "Response Engagement", text: `${analytics.responseRate.toFixed(1)}% completion rate with ${analytics.feedbackComments.length} detailed comments` },
+                  { colorClass: "bg-purple-500", title: "Overall Trend", text: analytics.averageRating >= 7 ? 'Department is performing well with high satisfaction rates' : analytics.averageRating >= 4 ? 'Department shows average performance with room for improvement' : 'Department requires immediate attention and improvement strategies' }
                 ].map((insight, idx) => (
                   <div key={idx} className="flex items-start space-x-3">
-                    <div className={`w-2 h-2 bg-${insight.color}-500 rounded-full mt-2 flex-shrink-0`}></div>
+                    <div className={`w-2 h-2 ${insight.colorClass} rounded-full mt-2 flex-shrink-0`}></div>
                     <div className="min-w-0">
                       <div className="font-medium text-sm">{insight.title}</div>
                       <div className="text-xs text-gray-600 break-words">{insight.text}</div>
@@ -321,14 +321,14 @@ export default function AnalyticsDashboard() {
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: analytics.satisfactionLevels.find(s => s.level === 'Excellent')?.count || 0, label: "Excellent Ratings", bg: "green" },
-                    { value: analytics.criteriaAverage.length, label: "Criteria Evaluated", bg: "blue" },
-                    { value: analytics.timeSeriesData.length, label: "Days with Feedback", bg: "purple" },
-                    { value: analytics.feedbackComments.length > 0 ? ((analytics.feedbackComments.length / analytics.totalResponses) * 100).toFixed(0) + "%" : "0%", label: "Left Comments", bg: "orange" }
+                    { value: analytics.satisfactionLevels.find(s => s.level === 'Excellent')?.count || 0, label: "Excellent Ratings", bgClass: "bg-green-50", textClass: "text-green-600", labelClass: "text-green-700" },
+                    { value: analytics.criteriaAverage.length, label: "Criteria Evaluated", bgClass: "bg-blue-50", textClass: "text-blue-600", labelClass: "text-blue-700" },
+                    { value: analytics.timeSeriesData.length, label: "Days with Feedback", bgClass: "bg-purple-50", textClass: "text-purple-600", labelClass: "text-purple-700" },
+                    { value: analytics.feedbackComments.length > 0 ? ((analytics.feedbackComments.length / analytics.totalResponses) * 100).toFixed(0) + "%" : "0%", label: "Left Comments", bgClass: "bg-orange-50", textClass: "text-orange-600", labelClass: "text-orange-700" }
                   ].map((stat, idx) => (
-                    <div key={idx} className={`text-center p-3 bg-${stat.bg}-50 rounded-lg`}>
-                      <div className={`text-xl font-bold text-${stat.bg}-600`}>{stat.value}</div>
-                      <div className={`text-xs text-${stat.bg}-700`}>{stat.label}</div>
+                    <div key={idx} className={`text-center p-3 ${stat.bgClass} rounded-lg`}>
+                      <div className={`text-xl font-bold ${stat.textClass}`}>{stat.value}</div>
+                      <div className={`text-xs ${stat.labelClass}`}>{stat.label}</div>
                     </div>
                   ))}
                 </div>
