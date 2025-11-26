@@ -30,13 +30,15 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Insert feedback
+      // Insert feedback with Pakistan time
+      const pkTime = new Date(Date.now() + (5 * 60 * 60 * 1000)) // Add 5 hours for PKT
+      
       const result = await client.query(
         `INSERT INTO feedback 
-         (feedback_id, name, department, purse_number, selected_dept, ratings, comments) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7) 
+         (feedback_id, name, department, purse_number, selected_dept, ratings, comments, timestamp, created_at) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
          RETURNING id`,
-        [feedbackId, name, department, purseNumber, selectedDept, JSON.stringify(ratings), comments]
+        [feedbackId, name, department, purseNumber, selectedDept, JSON.stringify(ratings), comments, pkTime, pkTime]
       )
       
       return NextResponse.json({ 
@@ -72,22 +74,16 @@ export async function GET(request: NextRequest) {
       const result = await client.query(query, params)
       
       // Transform data to match frontend format
-      const feedback = result.rows.map(row => {
-        // Convert UTC to Pakistan Time (UTC+5)
-        const utcDate = new Date(row.timestamp)
-        const pkDate = new Date(utcDate.getTime() + (5 * 60 * 60 * 1000))
-        
-        return {
-          id: row.feedback_id,
-          name: row.name,
-          department: row.department,
-          purseNumber: row.purse_number,
-          selectedDept: row.selected_dept,
-          ratings: row.ratings,
-          comments: row.comments,
-          timestamp: pkDate.toISOString().replace('T', ' ').substring(0, 23)
-        }
-      })
+      const feedback = result.rows.map(row => ({
+        id: row.feedback_id,
+        name: row.name,
+        department: row.department,
+        purseNumber: row.purse_number,
+        selectedDept: row.selected_dept,
+        ratings: row.ratings,
+        comments: row.comments,
+        timestamp: row.timestamp.toISOString().replace('T', ' ').substring(0, 23)
+      }))
       
       return NextResponse.json(feedback)
     } finally {
