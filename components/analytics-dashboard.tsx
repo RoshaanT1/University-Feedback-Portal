@@ -356,7 +356,13 @@ export default function AnalyticsDashboard() {
                           <span className="font-medium">Anonymous Feedback #{index + 1}</span>
                           {feedback.department && <span className="ml-2 text-gray-500">• {feedback.department}</span>}
                         </div>
-                        <div className="text-xs text-gray-400 flex-shrink-0 ml-2">{new Date(feedback.timestamp).toLocaleDateString()}</div>
+                        <div className="text-xs text-gray-400 flex-shrink-0 ml-2">
+                          {new Date(feedback.timestamp).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric', 
+                            year: 'numeric'
+                          })}
+                        </div>
                       </div>
                       <div className="text-gray-800 text-sm leading-relaxed break-words">{feedback.comments}</div>
                     </div>

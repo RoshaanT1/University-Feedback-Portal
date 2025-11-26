@@ -72,16 +72,22 @@ export async function GET(request: NextRequest) {
       const result = await client.query(query, params)
       
       // Transform data to match frontend format
-      const feedback = result.rows.map(row => ({
-        id: row.feedback_id,
-        name: row.name,
-        department: row.department,
-        purseNumber: row.purse_number,
-        selectedDept: row.selected_dept,
-        ratings: row.ratings,
-        comments: row.comments,
-        timestamp: row.timestamp.toISOString()
-      }))
+      const feedback = result.rows.map(row => {
+        // Convert UTC to Pakistan Time (UTC+5)
+        const utcDate = new Date(row.timestamp)
+        const pkDate = new Date(utcDate.getTime() + (5 * 60 * 60 * 1000))
+        
+        return {
+          id: row.feedback_id,
+          name: row.name,
+          department: row.department,
+          purseNumber: row.purse_number,
+          selectedDept: row.selected_dept,
+          ratings: row.ratings,
+          comments: row.comments,
+          timestamp: pkDate.toISOString().replace('T', ' ').substring(0, 23)
+        }
+      })
       
       return NextResponse.json(feedback)
     } finally {
