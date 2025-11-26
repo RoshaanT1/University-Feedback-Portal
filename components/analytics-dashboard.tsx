@@ -83,9 +83,10 @@ export default function AnalyticsDashboard() {
 
     const feedbackComments = deptFeedback.filter(f => f.comments && f.comments.trim().length > 0)
     const feedbackByDate = deptFeedback.reduce((acc, feedback) => {
-      const date = new Date(feedback.timestamp).toLocaleDateString()
-      if (!acc[date]) acc[date] = 0
-      acc[date]++
+      const dateObj = new Date(feedback.timestamp)
+      const dateKey = dateObj.toISOString().split('T')[0] // YYYY-MM-DD format
+      if (!acc[dateKey]) acc[dateKey] = 0
+      acc[dateKey]++
       return acc
     }, {} as Record<string, number>)
 
@@ -245,7 +246,14 @@ export default function AnalyticsDashboard() {
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={analytics.timeSeriesData} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="formattedDate" tick={{ fontSize: 10 }} interval={0} />
+                    <XAxis 
+                      dataKey="formattedDate" 
+                      tick={{ fontSize: 10 }} 
+                      interval="preserveStartEnd"
+                      angle={-45}
+                      textAnchor="end"
+                      height={60}
+                    />
                     <YAxis tick={{ fontSize: 10 }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Area type="monotone" dataKey="count" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.3} strokeWidth={2} />
